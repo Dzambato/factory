@@ -1,0 +1,13 @@
+{% load static %}
+{% load i18n %}
+
+{% url "dashboard:staff-index" as url %}
+<div class="btn-fab-fixed">
+        <a class="btn-fab-default waves-effect waves-light"
+           title="{% trans "Back" context "Back staff detail page" %}"
+           href="{{ url }}{% if hash %}{{ hash }}{% endif %}">
+            <svg data-src="{% static "dashboard/images/arrow-left.svg" %}"/>
+        </a>
+    </div>
+
+

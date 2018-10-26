@@ -1,0 +1,8 @@
+{% load i18n %}
+<form method="post" action="{% url 'account:logout' %}" novalidate>
+    {% csrf_token %}
+    <h1>{% trans 'You already authorized' %}</h1>
+    <button class="btn primary narrow">
+        {% trans "Log out" context "Logout form primary action" %}
+    </button>
+</form>

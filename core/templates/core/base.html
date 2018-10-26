@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+{% load i18n %}
+{% load placeholder %}
+{% load static %}
+{% load translate %}
+
+<html lang="{{ LANGUAGE_CODE }}" class="no-js">
+<head>
+    <title>{% block title %}{{ site.name }}{% endblock %}</title>
+    {% block meta %}
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="generator" content="Saleor">
+        <meta name="theme-color" content="#333333">
+        <meta name="msapplication-TileColor" content="#2b5797">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <meta name="apple-mobile-web-app-title" content="{{ site.name }}">
+        <meta name="og:type" content="website">
+        {% get_available_languages as LANGUAGES %}
+        {% for lang_code, language_name in LANGUAGES %}
+            <link rel="alternate" hreflang="{{ lang_code }}"
+                  href="{% translate_url url=request.path lang_code=lang_code %}"/>
+        {% endfor %}
+    {% endblock meta %}
+
+    {% include 'core/favicon.html' %}
+
+    {% block stylesheet %}{% endblock stylesheet %}
+
+    {% block meta_tags %}
+        <meta property="og:title" content="{{ site.settings.translated.header_text }}">
+        <meta property="og:description" content="{{ site.settings.translated.description }}">
+        <meta name="description" content="{{ site.settings.translated.description }}">
+        <meta property="og:url" content="{{ request.build_absolute_uri }}">
+        <meta property="og:image" content="{% static "images/block1.png" %}">
+    {% endblock meta_tags %}
+
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+    <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+</head>
+
+<body>
+
+{% block header %}
+<header class="navbar" role="navigation">
+    <div class="navbar__login container-fluid {% if user.is_impersonate %} bg-warning{% endif %}">
+        <div class=" d-none d-md-block container">
+            <div class="row">
+                <div class="col-6">
+                    <p class="text-left">{{ site.settings.translated.header_text }}</p>
+                </div>
+                <div class="col-6">
+                    <ul class="float-right">
+                        {% get_available_languages as LANGUAGES %}
+
+                        {# We display language picker only if there're languages to pick from #}
+                        {% if LANGUAGES|length > 1 %}
+                            {% get_current_language as LANGUAGE_CODE %}
+                            <li>
+                                <div class="language-picker dropdown show">
+                                    <a class="dropdown-toggle dropdown-link " id="language-picker-button">
+                                        {{ LANGUAGE_CODE|language_name_local }}
+                                    </a>
+                                </div>
+                            </li>
+                        {% endif %}
+                        {% if user.is_authenticated %}
+                            {% if user.is_staff or request.impersonator.is_staff %}
+                                <li>
+                                    <a href="{% url "dashboard:index" %}" target="_blank" rel="noopener">
+                                        {% trans "Dashboard" context "Main navigation item" %}
+                                    </a>
+                                </li>
+                            {% endif %}
+                            <li>
+                                <a href="{% url "account:logout" %}">
+                                    {% trans "Log out" context "Main navigation item" %}</a>
+                            </li>
+                        {% else %}
+                        <li>
+                            <a rel="nofollow" href="{% url "account:login" %}">
+                                {% trans "Log in" context "Main navigation item" %}
+                            </a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="navbar__menu container d-block">
+        <nav class="navigation">
+        </nav>
+    </div>
+</header>
+{% endblock %}
+<div class="container maincontent">
+    {% block topcontent %}{% endblock topcontent %}
+    {% block breadcrumb %}
+    {% endblock breadcrumb %}
+    {% block content %}
+    {% endblock content %}
+</div>
+{% block footer %}
+{% endblock %}
+{% block footer_scripts %}
+{% endblock footer_scripts %}
+{% if LANGUAGES|length > 1 %}
+
+{% endif %}
+</body>
+</html>

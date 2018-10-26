@@ -1,0 +1,71 @@
+{% extends 'dashboard/index.html' %}
+{% load i18n %}
+{% load materializecss %}
+{% load static %}
+{% load utils %}
+
+{% block title %}
+    {% trans "Staff" context "Dashboard staff members list" %} - {{ block.super }}
+{% endblock %}
+
+{% block menu_staff_class %}active{% endblock %}
+
+{% block header_extra %}
+    <div class="btn-fab-fixed">
+        <a class="btn-fab-default waves-effect waves-light"
+           title="{% trans "Add staff member" context "Staff members list add button text" %}"
+           href="{% url 'dashboard:staff-create' %}">
+            <svg data-src="{% static "dashboard/images/add.svg" %}"/>
+        </a>
+    </div>
+{% endblock %}
+
+{% block breadcrumbs %}
+    <ul class="breadcrumbs">
+        <li class="visible-s">
+            {% trans "Staff" context "Dashboard staff members list" %}
+        </li>
+    </ul>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col s12 l9">
+        {% if staff_list %}
+        <div class="card">
+            <div class="data-table-container">
+                <table class="bordered highlight responsive data-table">
+                    <thead>
+                    <tr>
+                        {% trans "Username" context "Staff members table header" as label %}
+                        {% sorting_header 'username' label %}
+
+                        {% trans "Email" context "Staff members table header" as label %}
+                        {% sorting_header 'email' label %}
+
+                        {% trans "Phone" context "Staff members table header" as label %}
+                        {% sorting_header 'phone' label %}
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for user in staff_list %}
+                        <tr data-action-go="{% url "dashboard:staff-details" pk=user.pk %}">
+                            <td>
+                                {{ user.username }}
+                            </td>
+                            <td>
+                                {{ user.email }}
+                            </td>
+                            <td>
+                                {{ user.phone }}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

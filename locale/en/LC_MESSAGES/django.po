@@ -1,0 +1,388 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-10-25 16:27+0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: .\AztpaFactory\settings.py:157
+msgid "Russian"
+msgstr ""
+
+#: .\AztpaFactory\settings.py:158
+msgid "English"
+msgstr ""
+
+#: .\account\forms.py:10
+msgid "Invalid login message"
+msgstr ""
+
+#: .\account\models.py:51
+msgid "email address"
+msgstr ""
+
+#: .\account\models.py:52
+msgid "username"
+msgstr ""
+
+#: .\account\models.py:53
+msgid "Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only."
+msgstr ""
+
+#: .\account\models.py:54
+msgid "A user with that username already exists."
+msgstr ""
+
+#: .\account\models.py:59
+msgid "active"
+msgstr ""
+
+#: .\account\models.py:62
+msgid ""
+"Designates whether this user should be treated as active. Unselect this "
+"instead of deleting accounts."
+msgstr ""
+
+#: .\account\models.py:67
+msgid "date joined"
+msgstr ""
+
+#: .\account\models.py:68
+msgid "first name"
+msgstr ""
+
+#: .\account\models.py:69
+msgid "last name"
+msgstr ""
+
+#: .\account\models.py:81
+msgctxt "Permission description"
+msgid "Manage customers."
+msgstr ""
+
+#: .\account\models.py:84
+msgctxt "Permission description"
+msgid "Manage staff."
+msgstr ""
+
+#: .\account\templates\account\login.html:28
+msgctxt "Login window header"
+msgid "Login"
+msgstr ""
+
+#: .\account\templates\account\login_form.html:13
+msgctxt "Login form primary action"
+msgid "Log in"
+msgstr ""
+
+#: .\account\templates\account\logout_form.html:4
+msgid "You already authorized"
+msgstr ""
+
+#: .\account\templates\account\logout_form.html:6
+msgctxt "Logout form primary action"
+msgid "Log out"
+msgstr ""
+
+#: .\account\views.py:23
+msgid "You have been successfully logged out."
+msgstr ""
+
+#: .\core\models.py:12
+msgctxt "Top menu"
+msgid "Top menu field"
+msgstr ""
+
+#: .\core\models.py:13
+msgctxt "Bottom menu"
+msgid "Bottom menu field"
+msgstr ""
+
+#: .\core\models.py:24
+msgctxt "Permission description"
+msgid "Manage settings."
+msgstr ""
+
+#: .\core\templates\core\base.html:75
+msgctxt "Main navigation item"
+msgid "Dashboard"
+msgstr ""
+
+#: .\core\templates\core\base.html:81
+msgctxt "Main navigation item"
+msgid "Log out"
+msgstr ""
+
+#: .\core\templates\core\base.html:86
+msgctxt "Main navigation item"
+msgid "Log in"
+msgstr ""
+
+#: .\dashboard\menu\views.py:27
+msgctxt "Dashboard message"
+msgid "Updated storefront menus"
+msgstr ""
+
+#: .\dashboard\settings\forms.py:14
+msgctxt "Domain name (FQDN)"
+msgid "Domain name"
+msgstr ""
+
+#: .\dashboard\settings\forms.py:16
+msgctxt "Display name"
+msgid "Display name"
+msgstr ""
+
+#: .\dashboard\settings\forms.py:26
+msgctxt "Header text"
+msgid "Header text"
+msgstr ""
+
+#: .\dashboard\settings\forms.py:28
+msgctxt "Description"
+msgid "Description"
+msgstr ""
+
+#: .\dashboard\settings\forms.py:29
+msgctxt "Top menu text"
+msgid "Top menu text"
+msgstr ""
+
+#: .\dashboard\settings\forms.py:30
+msgctxt "Bottom menu text"
+msgid "Bottom menu text"
+msgstr ""
+
+#: .\dashboard\staff\views.py:54
+#, python-format
+msgctxt "Dashboard message"
+msgid "Updated staff member %s"
+msgstr ""
+
+#: .\dashboard\templates\dashboard\base.html:63
+msgctxt "Dashboard top nav site redirection"
+msgid "Visit site"
+msgstr ""
+
+#: .\dashboard\templates\dashboard\base.html:69
+msgctxt "Log out from account"
+msgid "Log out"
+msgstr ""
+
+#: .\dashboard\templates\dashboard\base.html:90
+#: .\dashboard\templates\dashboard\base.html:144
+msgctxt "Dashboard homepage"
+msgid "Home"
+msgstr ""
+
+#: .\dashboard\templates\dashboard\base.html:96
+msgctxt "Dashboard configuration"
+msgid "Configuration"
+msgstr ""
+
+#: .\dashboard\templates\dashboard\base.html:102
+#: .\dashboard\templates\dashboard\settings\form.html:13
+msgctxt "Dashboard site settings"
+msgid "Site settings"
+msgstr ""
+
+#: .\dashboard\templates\dashboard\base.html:109
+#: .\dashboard\templates\dashboard\menu\index.html:13
+msgctxt "Dashboard menus list"
+msgid "Navigation"
+msgstr ""
+
+#: .\dashboard\templates\dashboard\base.html:117
+#: .\dashboard\templates\dashboard\staff\index.html:8
+#: .\dashboard\templates\dashboard\staff\index.html:26
+msgctxt "Dashboard staff members list"
+msgid "Staff"
+msgstr ""
+
+#: .\dashboard\templates\dashboard\base.html:128
+msgctxt "Dashboard software version"
+msgid "Release:"
+msgstr ""
+
+#: .\dashboard\templates\dashboard\includes\_back_link.html:7
+msgctxt "Back staff detail page"
+msgid "Back"
+msgstr ""
+
+#: .\dashboard\templates\dashboard\menu\index.html:30
+msgctxt "Menu list table header Menu name"
+msgid "Menu name"
+msgstr ""
+
+#: .\dashboard\templates\dashboard\menu\index.html:49
+msgctxt "Empty menu list message"
+msgid "No menus found."
+msgstr ""
+
+#: .\dashboard\templates\dashboard\menu\index.html:60
+msgid "Storefront Menus"
+msgstr ""
+
+#: .\dashboard\templates\dashboard\menu\index.html:73
+msgctxt "Dashboard update action"
+msgid "Save"
+msgstr ""
+
+#: .\dashboard\templates\dashboard\settings\detail.html:16
+#: .\dashboard\templates\dashboard\settings\form.html:24
+msgctxt "Site settings menu category name"
+msgid "Site settings"
+msgstr ""
+
+#: .\dashboard\templates\dashboard\settings\detail.html:28
+msgctxt "Site name settings field"
+msgid "Site name"
+msgstr ""
+
+#: .\dashboard\templates\dashboard\settings\detail.html:40
+msgctxt "Site settings field"
+msgid "Domain"
+msgstr ""
+
+#: .\dashboard\templates\dashboard\settings\detail.html:50
+msgctxt "Site settings field"
+msgid "Header text"
+msgstr ""
+
+#: .\dashboard\templates\dashboard\settings\detail.html:60
+msgctxt "Site settings field"
+msgid "Description"
+msgstr ""
+
+#: .\dashboard\templates\dashboard\settings\detail.html:70
+msgctxt "Top menu settings field"
+msgid "Top menu"
+msgstr ""
+
+#: .\dashboard\templates\dashboard\settings\detail.html:80
+msgctxt "Bottom menu settings field"
+msgid "Bottom menu"
+msgstr ""
+
+#: .\dashboard\templates\dashboard\settings\detail.html:90
+msgctxt "Site settings action"
+msgid "Edit site settings"
+msgstr ""
+
+#: .\dashboard\templates\dashboard\settings\form.html:11
+msgctxt "Site settings page title"
+msgid "Add new site settings"
+msgstr ""
+
+#: .\dashboard\templates\dashboard\settings\form.html:29
+msgctxt "Dashboard site settings"
+msgid "Edit"
+msgstr ""
+
+#: .\dashboard\templates\dashboard\settings\form.html:63
+#: .\dashboard\templates\dashboard\staff\detail.html:75
+msgctxt "Dashboard cancel action"
+msgid "Cancel"
+msgstr ""
+
+#: .\dashboard\templates\dashboard\settings\form.html:66
+#: .\dashboard\templates\dashboard\staff\detail.html:79
+msgctxt "Dashboard update action"
+msgid "Update"
+msgstr ""
+
+#: .\dashboard\templates\dashboard\staff\detail.html:10
+msgctxt "Dashboard add staff member"
+msgid "Add new staff member"
+msgstr ""
+
+#: .\dashboard\templates\dashboard\staff\detail.html:12
+msgctxt "Dashboard staff"
+msgid "Staff"
+msgstr ""
+
+#: .\dashboard\templates\dashboard\staff\detail.html:25
+msgctxt "Dashboard staff list"
+msgid "Staff"
+msgstr ""
+
+#: .\dashboard\templates\dashboard\staff\detail.html:34
+msgctxt "Dashboard add staff member action"
+msgid "Add staff member"
+msgstr ""
+
+#: .\dashboard\templates\dashboard\staff\detail.html:50
+msgctxt "Staff member form action"
+msgid "Remove staff member"
+msgstr ""
+
+#: .\dashboard\templates\dashboard\staff\detail.html:64
+msgctxt "Staff member details header"
+msgid "Staff member details"
+msgstr ""
+
+#: .\dashboard\templates\dashboard\staff\detail.html:81
+msgctxt "Dashboard add action"
+msgid "Add"
+msgstr ""
+
+#: .\dashboard\templates\dashboard\staff\index.html:16
+msgctxt "Staff members list add button text"
+msgid "Add staff member"
+msgstr ""
+
+#: .\dashboard\templates\dashboard\staff\index.html:40
+msgctxt "Staff members table header"
+msgid "Username"
+msgstr ""
+
+#: .\dashboard\templates\dashboard\staff\index.html:43
+msgctxt "Staff members table header"
+msgid "Email"
+msgstr ""
+
+#: .\dashboard\templates\dashboard\staff\index.html:46
+msgctxt "Staff members table header"
+msgid "Phone"
+msgstr ""
+
+#: .\dashboard\templates\materializecssform\field.html:34
+#: .\dashboard\templates\materializecssform\field.html:61
+#: .\dashboard\templates\materializecssform\field.html:87
+#: .\dashboard\templates\materializecssform\field.html:116
+#: .\dashboard\templates\materializecssform\field.html:143
+#: .\dashboard\templates\materializecssform\field.html:167
+#: .\dashboard\templates\materializecssform\field.html:194
+#: .\dashboard\templates\materializecssform\field.html:220
+#: .\dashboard\templates\materializecssform\field.html:240
+msgctxt "Dashboard form labels"
+msgid "(optional)"
+msgstr ""
+
+#: .\dashboard\templates\materializecssform\field.html:39
+#: .\dashboard\templates\materializecssform\field.html:66
+#, python-format
+msgid ""
+"\n"
+"            %(current_chars_count)s</span> of %(max_chars_count)s characters "
+"used\n"
+"        "
+msgstr ""
+
+#: .\menu\models.py:21
+msgctxt "Permission description"
+msgid "Manage navigation."
+msgstr ""

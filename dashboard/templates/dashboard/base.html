@@ -1,0 +1,170 @@
+{% load static %}
+<!DOCTYPE html>
+{% load i18n %}
+{% load placeholder %}
+{% load translate %}
+
+<html lang="{{ LANGUAGE_CODE }}" class="no-js">
+<head>
+    <title>{% block title %}{{ site.name }}{% endblock %}</title>
+    {% block meta %}
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="generator" content="Saleor">
+        <meta name="theme-color" content="#333333">
+        <meta name="msapplication-TileColor" content="#2b5797">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <meta name="apple-mobile-web-app-title" content="{{ site.name }}">
+        <meta name="og:type" content="website">
+        {% get_available_languages as LANGUAGES %}
+        {% for lang_code, language_name in LANGUAGES %}
+            <link rel="alternate" hreflang="{{ lang_code }}"
+                  href="{% translate_url url=request.path lang_code=lang_code %}"/>
+        {% endfor %}
+    {% endblock meta %}
+
+    {% include 'core/favicon.html' %}
+
+    {% block stylesheet %}{% endblock stylesheet %}
+
+    {% block meta_tags %}
+        <meta property="og:title" content="{{ site.settings.translated.header_text }}">
+        <meta property="og:description" content="{{ site.settings.translated.description }}">
+        <meta name="description" content="{{ site.settings.translated.description }}">
+        <meta property="og:url" content="{{ request.build_absolute_uri }}">
+        <meta property="og:image" content="{% static "images/block1.png" %}">
+    {% endblock meta_tags %}
+
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+    <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+</head>
+
+<body class="{% block body_class %}body-home{% endblock %}">
+{% block header %}
+    <header>
+    <nav class="top-nav" id="top-nav">
+        <div class="nav-wrapper">
+            <div class="right">
+                <a class="dropdown-button" data-constrainwidth="false" href="#" data-activates="user-action">
+                    <svg data-src="{% static "dashboard/images/account-circle.svg" %}" width="24" height="24"
+                         fill="#fff"/>
+                </a>
+                <ul id="user-action" class="dropdown-content">
+                    <li class="user-name">
+                        {{ request.user }}
+                    </li>
+                    <li class="divider"></li>
+                    <li>
+                        <a href="{% url 'core:home' %}" target="_blank" class="waves-effect">
+                            {% trans "Visit site" context "Dashboard top nav site redirection" %}
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="{% url 'account:logout' %}" class="waves-effect">
+                            {% trans "Log out" context "Log out from account" %}
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <ul class="left">
+                <li>
+                    <a href="#" id="toggle-menu">
+                        <svg data-src="{% static "dashboard/images/mobile-menu.svg" %}" width="24" height="24"/>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'dashboard:index' %}" class="logo">
+                        <svg data-src="{% static "dashboard/images/logo.svg" %}" height="38px" width="176px"/>
+                    </a>
+                </li>
+
+            </ul>
+            <ul class="side-nav">
+                <li class="nav-home">
+                    <a href="{% url 'dashboard:index' %}">
+                        {% trans "Home" context "Dashboard homepage" %}
+                    </a>
+                </li>
+                {% if perms.site.manage_settings or perms.shipping.manage_shipping or perms.product.manage_products or perms.page.manage_pages %}
+                    <li class="side-nav-section">
+                        <p>
+                            {% trans "Configuration" context "Dashboard configuration" %}
+                        </p>
+                        <ul>
+                            {% if perms.site.manage_settings %}
+                                <li class="{% block menu_settings_class %}{% endblock %}">
+                                    <a href="{% url 'dashboard:settings-index' %}">
+                                        {% trans "Site settings" context "Dashboard site settings" %}
+                                    </a>
+                                </li>
+
+                                {% if perms.menu.manage_menus %}
+                                    <li class="{% block menu_menus_class %}{% endblock %}">
+                                        <a href="{% url 'dashboard:menu-index' %}">
+                                            {% trans "Navigation" context "Dashboard menus list" %}
+                                        </a>
+                                    </li>
+                                {% endif %}
+
+                                {% if perms.account.manage_users %}
+                                    <li class="{% block menu_staff_class %}{% endblock %}">
+                                        <a href="{% url 'dashboard:staff-index' %}">
+                                            {% trans "Staff" context "Dashboard staff members list" %}
+                                        </a>
+                                    </li>
+                                {% endif %}
+
+                            {% endif %}
+                        </ul>
+                    </li>
+
+                    <li class="side-nav-section" id="version-indicator">
+                        <p>
+                            {% trans "Release:" context "Dashboard software version" %}
+                        </p>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+</header>
+{% endblock %}
+{% block top-nav %}
+    <div class="subheader top-nav">
+        <div class="nav-wrapper container">
+            {% block breadcrumbs %}
+                <ul class="breadcrumbs">
+                    <li class="visible-s">
+                        <a href="#">
+                            {% trans "Home" context "Dashboard homepage" %}
+                        </a>
+                    </li>
+                </ul>
+            {% endblock %}
+            {% block header_extra %}{% endblock %}
+        </div>
+    </div>
+{% endblock %}
+<main class="main">
+    <div class="container">
+        {% block content %}{% endblock %}
+        <div id="dashboard-app"></div>
+    </div>
+    <div id="base-modal" class="modal"></div>
+    <div id="base-modal-fixed" class="modal modal-fixed-footer"></div>
+</main>
+
+{% block footer_scripts %}
+    <script type="text/javascript" src="{% url 'javascript-catalog' %}"></script>
+    <script src="{% static "dashboard/js/versatileimagefield.js" %}"></script>
+    <script src="{% static "dashboard/js/dashboard.js" %}"></script>
+{% endblock footer_scripts %}
+{% block custom_js %}{% endblock %}
+</body>
+</html>
+

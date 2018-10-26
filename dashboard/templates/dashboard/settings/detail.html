@@ -1,0 +1,96 @@
+{% extends 'dashboard/index.html' %}
+
+{% load i18n %}
+{% load static %}
+
+{% block title %}
+    {{ site_settings }} - {{ block.super }}
+{% endblock %}
+
+{% block menu_settings_class %}active{% endblock %}
+
+{% block breadcrumbs %}
+    <ul class="breadcrumbs breadcrumbs--history">
+        <li>
+      <span class="breadcrumbs--elipsed-item">
+        {% trans 'Site settings' context 'Site settings menu category name' %}
+      </span>
+        </li>
+    </ul>
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col s12 l9">
+            <div class="card">
+                <div class="card-content">
+          <span class="card-title">
+            {% trans "Site name" context "Site name settings field" %}
+          </span>
+                    <div class="row">
+                        <div class="col s12 m4 l12">
+                            <p>
+                                {{ site.name }}
+                            </p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col s12 m4 l12">
+                            <h4>
+                                {% trans "Domain" context "Site settings field" %}
+                            </h4>
+                            <p>
+                                {{ site.domain }}
+                            </p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col s12 m4 l12">
+                            <h4>
+                                {% trans "Header text" context "Site settings field" %}
+                            </h4>
+                            <p>
+                                {{ site_settings.header_text }}
+                            </p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col s12 m4 l12">
+                            <h4>
+                                {% trans "Description" context "Site settings field" %}
+                            </h4>
+                            <p>
+                                {{ site_settings.description|default:"-" }}
+                            </p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col s12 m4 l12">
+                            <h4>
+                                {% trans "Top menu" context "Top menu settings field" %}
+                            </h4>
+                            <p>
+                                {{ site_settings.top_menu|default:'-' }}
+                            </p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col s12 m4 l12">
+                            <h4>
+                                {% trans "Bottom menu" context "Bottom menu settings field" %}
+                            </h4>
+                            <p>
+                                {{ site_settings.bottom_menu|default:'-' }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-action">
+                    <a class="btn-flat waves-effect" href="{% url 'dashboard:settings-edit' slug=site_settings.slug %}">
+                        {% trans "Edit site settings" context "Site settings action" %}
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

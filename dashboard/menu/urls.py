@@ -18,6 +18,10 @@ from . import views
 
 urlpatterns = [
     url(r'^$', views.index, name='menu-index'),
-    #url(r'^(?P<slug>[\w-]+)/$', views.settings_details, name='settings-details'),
+    url(r'^add/$', views.menu_create, name='menu-add'),
+    url(r'^(?P<pk>[0-9]+)/delete/$',views.menu_delete, name='menu-delete'),
+    url(r'^(?P<pk>[\w-]+)/$', views.menu_details, name='menu-details'),
+    url(r'^(?P<pk>[\w-]+)/edit/$', views.menu_edit, name='menu-edit'),
+    url(r'^(?P<menu_pk>[0-9]+)/item/(?P<item_pk>[0-9]+)/$',views.menu_item_details, name='menu-item-details'),
    # url(r'^(?P<slug>[\w-]+)/edit/$', views.settings_edit, name='settings-edit'),
 ]

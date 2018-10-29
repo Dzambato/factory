@@ -18,6 +18,10 @@ class User(AbstractUser):
         default=True,
         help_text=ugettext_lazy('Designates whether the user can log into this admin site.'),
     )
+
+    def __init__(self,*args,**kwargs):
+        super().__init__(*args,**kwargs)
+
     class Meta:
         permissions = (
             (

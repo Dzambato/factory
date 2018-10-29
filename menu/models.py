@@ -6,6 +6,7 @@ from django.urls import reverse
 from mptt.models import MPTTModel
 from versatileimagefield.fields import PPOIField, VersatileImageField
 from seo.models import SeoModel
+from core.models import SortableModel
 
 # Create your models here.
 
@@ -46,7 +47,7 @@ class Category(MPTTModel, SeoModel):
             kwargs={'slug': self.slug, 'category_id': self.id})
 
 
-class MenuItem(MPTTModel, SeoModel):
+class MenuItem(MPTTModel, SortableModel):
     menu = models.ForeignKey(
         Menu, related_name='items', on_delete=models.CASCADE)
     name = models.CharField(max_length=128)
@@ -54,7 +55,6 @@ class MenuItem(MPTTModel, SeoModel):
         'self', null=True, blank=True, related_name='children',
         on_delete=models.CASCADE)
 
-    # not mandatory fields, usage depends on what type of link is stored
     url = models.URLField(max_length=256, blank=True, null=True)
     category = models.ForeignKey(Category, blank=True, null=True, on_delete=models.CASCADE)
     # collection = models.ForeignKey(Collection, blank=True, null=True, on_delete=models.CASCADE)
@@ -64,7 +64,7 @@ class MenuItem(MPTTModel, SeoModel):
     tree = TreeManager()
 
     class Meta:
-        ordering = ('name',)
+        ordering = ('sort_order',)
         app_label = 'menu'
 
     def __str__(self):
@@ -77,31 +77,29 @@ class MenuItem(MPTTModel, SeoModel):
 
     @property
     def linked_object(self):
-        return self.category or self.collection or self.page
+        return self.category or self.page
 
     def get_url(self):
         linked_object = self.linked_object
         return linked_object.get_absolute_url() if linked_object else self.url
 
+    @property
+    def destination_display(self):
+        linked_object = self.linked_object
 
-            # @property
-            # def destination_display(self):
-            #     linked_object = self.linked_object
-            #
-            #     if not linked_object:
-            #         prefix = pgettext_lazy('Link object type description', 'URL: ')
-            #         return prefix + self.url
-            #
-            #     if isinstance(linked_object, Category):prefix = pgettext_lazy(
-            #             'Link object type description', 'Category: ')
-            #     elif isinstance(linked_object, Collection):
-            #         prefix = pgettext_lazy(
-            #             'Link object type description', 'Collection: ')
-            #     else:
-            #         prefix = pgettext_lazy(
-            #             'Link object type description', 'Page: ')
-            #
-            #     return prefix + str(linked_object)
-            # def is_public(self):
-            #     return not self.linked_object or getattr(
-            #         self.linked_object, 'is_published', True)
+        if not linked_object:
+            prefix = pgettext_lazy('Link object type description', 'URL: ')
+            return prefix + self.url
+
+        if isinstance(linked_object, Category):
+            prefix = pgettext_lazy(
+                'Link object type description', 'Category: ')
+        else:
+            prefix = pgettext_lazy(
+                'Link object type description', 'Page: ')
+
+        return prefix + str(linked_object)
+
+    def is_public(self):
+        return not self.linked_object or getattr(
+            self.linked_object, 'is_published', True)

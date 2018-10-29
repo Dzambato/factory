@@ -10,7 +10,7 @@ from core.utils import get_paginator_items
 
 from account.models import User
 
-from .forms import StaffForm
+from .forms import StaffCreationForm, StaffChangeForm
 
 # Create your views here.
 
@@ -33,7 +33,7 @@ def index(request):
 @staff_member_required
 @permission_required('account.manage_staff')
 def staff_create(request):
-    form = StaffForm(request.POST or None, instance=User())
+    form = StaffCreationForm(request.POST or None, instance=User())
     print(form)
     if request.POST and form.is_valid() :
         form.save()
@@ -48,10 +48,9 @@ def staff_create(request):
 
 def staff_details (request, pk):
     staff_member =  get_object_or_404(User, is_staff=True, pk=pk)
-    staff_form = StaffForm( request.POST or None, instance=staff_member)
+    staff_form = StaffChangeForm( request.POST or None, instance=staff_member)
     if request.POST and staff_form.is_valid() and staff_form.has_changed():
         staff_form.save()
-        print(request.POST)
         msg = pgettext_lazy(
             'Dashboard message', 'Updatmed staff member %s')
         messages.success(request, msg)

@@ -4,12 +4,18 @@ from django.contrib.auth.decorators import permission_required
 from ..views import staff_member_required
 from django.contrib.sites.shortcuts import get_current_site
 from django.template.response import TemplateResponse
-from menu.models import Menu
+from menu.models import Menu, MenuItem
 from core.utils import get_paginator_items
+from dashboard.menu.utils import get_menu_obj_text, update_menu
 from django.contrib import messages
 from django.utils.translation import pgettext_lazy
+from django.http import JsonResponse
+from django.db.models import Q
 
-from .forms import AssignMenuForm, MenuForm
+from .forms import AssignMenuForm, MenuForm, MenuItemForm
+
+from page.models import Page
+from menu.models import Category
 
 # Create your views here.
 
@@ -116,3 +122,75 @@ def menu_delete(request, pk):
         'menu': menu, 'descendants': list(menu.items.all())}
     return TemplateResponse(
         request, 'dashboard/menu/modal/confirm_delete.html', ctx)
+
+
+
+@staff_member_required
+@permission_required('menu.manage_menus')
+def ajax_menu_links(request):
+    """Return available menu links filtered by request GET parameters.
+
+    Response format is that of a Select2 JS widget.
+    """
+    def get_obj_repr(obj):
+        obj_id = str(obj.pk) + '_' + obj.__class__.__name__
+        return {
+            'id': obj_id,
+            'text': get_menu_obj_text(obj)}
+
+    def get_group_repr(model, label, filter_fields, query):
+        queryset = model.objects.all()
+        if search_query and search_query.lower() not in label.lower():
+            kwargs = {
+                '%s__icontains' % (field,): query
+                for field in filter_fields}
+            queryset = queryset.filter(Q(**kwargs))
+        return {
+            'text': label,
+            'children': [get_obj_repr(obj) for obj in queryset]}
+
+    search_query = request.GET.get('q', '')
+    print(search_query)
+    groups = [
+        get_group_repr(
+            Category,
+            pgettext_lazy('Link object type group description', 'Category'),
+            ('name',),
+            search_query),
+        get_group_repr(
+            Page,
+            pgettext_lazy('Link object type group description', 'Page'),
+            ('title',),
+            search_query)
+    ]
+
+    groups = [group for group in groups if len(group.get('children')) > 0]
+    return JsonResponse({'results': groups})
+
+
+@staff_member_required
+@permission_required('menu.manage_menus')
+def menu_item_create(request, menu_pk, root_pk=None):
+    menu = get_object_or_404(Menu, pk=menu_pk)
+    path = None
+    if root_pk:
+        root = get_object_or_404(MenuItem, pk=root_pk)
+        path = root.get_ancestors(include_self=True)
+        menu_item = MenuItem(menu=menu, parent=root)
+    else:
+        menu_item = MenuItem(menu=menu)
+    form = MenuItemForm(request.POST or None, instance=menu_item)
+    if form.is_valid():
+        menu_item = form.save()
+        msg = pgettext_lazy(
+            'Dashboard message', 'Added menu item %s') % (menu_item,)
+        messages.success(request, msg)
+        update_menu(menu)
+        if root_pk:
+            return redirect(
+                'dashboard:menu-item-details',
+                menu_pk=menu.pk, item_pk=root_pk)
+        return redirect('dashboard:menu-details', pk=menu.pk)
+    ctx = {
+        'form': form, 'menu': menu, 'menu_item': menu_item, 'path': path}
+    return TemplateResponse(request, 'dashboard/menu/item/form.html', ctx)

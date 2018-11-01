@@ -10,7 +10,7 @@
     </span>
   </div>
   <div class="data-table-header-action">
-    <a href="{% if root_item %}{% url "dashboard:menu-index"%}{% else %}{% url "dashboard:menu-index"%}{% endif %}" class="btn-data-table btn-flat waves-effect">
+     <a href="{% if root_item %}{% url "dashboard:menu-item-add" menu_pk=menu.pk root_pk=root_item.pk %}{% else %}{% url "dashboard:menu-item-add" menu_pk=menu.pk %}{% endif %}" class="btn-data-table btn-flat waves-effect">
       {% trans "Add" %}
     </a>
   </div>

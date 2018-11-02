@@ -51,9 +51,7 @@ class MenuItem(MPTTModel, SortableModel):
     menu = models.ForeignKey(
         Menu, related_name='items', on_delete=models.CASCADE)
     name = models.CharField(max_length=128)
-    parent = models.ForeignKey(
-        'self', null=True, blank=True, related_name='children',
-        on_delete=models.CASCADE)
+    parent = models.ForeignKey('self', null=True, blank=True, related_name='children',on_delete=models.CASCADE)
 
     url = models.URLField(max_length=256, blank=True, null=True)
     category = models.ForeignKey(Category, blank=True, null=True, on_delete=models.CASCADE)

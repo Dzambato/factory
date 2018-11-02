@@ -128,10 +128,7 @@ def menu_delete(request, pk):
 @staff_member_required
 @permission_required('menu.manage_menus')
 def ajax_menu_links(request):
-    """Return available menu links filtered by request GET parameters.
 
-    Response format is that of a Select2 JS widget.
-    """
     def get_obj_repr(obj):
         obj_id = str(obj.pk) + '_' + obj.__class__.__name__
         return {
@@ -150,7 +147,6 @@ def ajax_menu_links(request):
             'children': [get_obj_repr(obj) for obj in queryset]}
 
     search_query = request.GET.get('q', '')
-    print(search_query)
     groups = [
         get_group_repr(
             Category,

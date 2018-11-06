@@ -11,7 +11,7 @@ from django.contrib import messages
 from django.utils.translation import pgettext_lazy
 from django.http import JsonResponse
 from django.db.models import Q
-
+from django.urls import reverse
 from .forms import AssignMenuForm, MenuForm, MenuItemForm
 
 from page.models import Page
@@ -75,7 +75,6 @@ def menu_item_details (request, menu_pk, item_pk):
 @permission_required('core.manage_settings')
 def menu_create (request):
     menu = Menu()
-    print(menu.pk)
     menu_form = MenuForm(request.POST, instance=menu)
     if menu_form.is_valid() and menu_form.has_changed() and request.POST:
         menu = menu_form.save()
@@ -139,8 +138,7 @@ def ajax_menu_links(request):
         queryset = model.objects.all()
         if search_query and search_query.lower() not in label.lower():
             kwargs = {
-                '%s__icontains' % (field,): query
-                for field in filter_fields}
+                '%s__contains' % (field,): query for field in filter_fields}
             queryset = queryset.filter(Q(**kwargs))
         return {
             'text': label,
@@ -162,6 +160,7 @@ def ajax_menu_links(request):
 
     groups = [group for group in groups if len(group.get('children')) > 0]
     return JsonResponse({'results': groups})
+
 
 
 @staff_member_required
@@ -187,6 +186,55 @@ def menu_item_create(request, menu_pk, root_pk=None):
                 'dashboard:menu-item-details',
                 menu_pk=menu.pk, item_pk=root_pk)
         return redirect('dashboard:menu-details', pk=menu.pk)
+    ctx = {
+        'form': form, 'menu': menu, 'menu_item': menu_item, 'path': path}
+    return TemplateResponse(request, 'dashboard/menu/item/form.html', ctx)
+
+@staff_member_required
+@permission_required('menu.manage_menus')
+def menu_item_delete(request, menu_pk, item_pk):
+    menu = get_object_or_404(Menu, pk=menu_pk)
+    menu_item = get_object_or_404(menu.items.all(), pk=item_pk)
+    if request.method == 'POST':
+        menu_item.delete()
+        update_menu(menu)
+        msg = pgettext_lazy(
+            'Dashboard message', 'Removed menu item %s') % (menu_item,)
+        messages.success(request, msg)
+        root_pk = menu_item.parent.pk if menu_item.parent else None
+        if root_pk:
+            redirect_url = reverse(
+                'dashboard:menu-item-details', kwargs={
+                    'menu_pk': menu_item.menu.pk, 'item_pk': root_pk})
+        else:
+            redirect_url = reverse(
+                'dashboard:menu-details', kwargs={'pk': menu.pk})
+        return (
+            JsonResponse({'redirectUrl': redirect_url}) if request.is_ajax()
+            else redirect(redirect_url))
+    ctx = {
+        'menu_item': menu_item,
+        'descendants': list(menu_item.get_descendants())}
+    return TemplateResponse(
+        request, 'dashboard/menu/item/modal/confirm_delete.html', ctx)
+
+
+
+@staff_member_required
+@permission_required('menu.manage_menus')
+def menu_item_edit(request, menu_pk, item_pk):
+    menu = get_object_or_404(Menu, pk=menu_pk)
+    menu_item = get_object_or_404(menu.items.all(), pk=item_pk)
+    path = menu_item.get_ancestors(include_self=True)
+    form = MenuItemForm(request.POST or None, instance=menu_item)
+    if form.is_valid():
+        menu_item = form.save()
+        update_menu(menu)
+        msg = pgettext_lazy(
+            'Dashboard message', 'Saved menu item %s') % (menu_item,)
+        messages.success(request, msg)
+        return redirect(
+            'dashboard:menu-item-details', menu_pk=menu.pk, item_pk=item_pk)
     ctx = {
         'form': form, 'menu': menu, 'menu_item': menu_item, 'path': path}
     return TemplateResponse(request, 'dashboard/menu/item/form.html', ctx)

@@ -17,6 +17,8 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf.urls import url
 from django.views.i18n import JavaScriptCatalog, set_language
+from django.conf.urls.static import static
+from django.conf import settings
 
 urlpatterns = [
     url('admin/', admin.site.urls),
@@ -24,5 +26,14 @@ urlpatterns = [
     url(r'^account/',include(('account.urls','account'),namespace='account')),
     url(r'^i18n/', include('django.conf.urls.i18n')),
     url(r'^jsi18n/$', JavaScriptCatalog.as_view(), name='javascript-catalog'),
+    url(r'^products/',include('product.urls', namespace='product')),
+    url(r'^page/',include(('page.urls','page'), namespace='page')),
+    url(r'^ckeditor/', include('ckeditor_uploader.urls')),
     url(r'^', include('core.urls',namespace='home')),
-]
+] + static(
+        settings.STATIC_URL,
+        document_root=settings.STATIC_ROOT
+    ) + static(
+        settings.MEDIA_URL,
+        document_root=settings.MEDIA_ROOT
+    )

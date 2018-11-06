@@ -25,15 +25,6 @@ class MenuForm(forms.ModelForm):
 
 
 class MenuItemForm(forms.ModelForm):
-    """Add or update menu item.
-
-    An item can point to a URL passed directly or to an object belonging
-    to one of querysets passed to a linked_object field.
-
-    linked_object value passed to a field requires format
-    '<obj.id>_<obj.__class__.__name__>', e. g. '17_Collection' for Collection
-    object with id 17.
-    """
 
     linked_object = AjaxSelect2CombinedChoiceField(
         querysets=[
@@ -56,7 +47,7 @@ class MenuItemForm(forms.ModelForm):
         obj = self.instance.linked_object
         if obj:
             obj_id = str(obj.pk) + '_' + obj.__class__.__name__
-            self.fields['linked_object'].set_initial(obj, obj_id=obj_id)
+            self.   fields['linked_object'].set_initial(obj, obj_id=obj_id)
 
     def clean(self):
         parent = self.instance.parent

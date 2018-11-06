@@ -46,93 +46,120 @@
 <body class="{% block body_class %}body-home{% endblock %}">
 {% block header %}
     <header>
-    <nav class="top-nav" id="top-nav">
-        <div class="nav-wrapper">
-            <div class="right">
-                <a class="dropdown-button" data-constrainwidth="false" href="#" data-activates="user-action">
-                    <svg data-src="{% static "dashboard/images/account-circle.svg" %}" width="24" height="24"
-                         fill="#fff"/>
-                </a>
-                <ul id="user-action" class="dropdown-content">
-                    <li class="user-name">
-                        {{ request.user }}
-                    </li>
-                    <li class="divider"></li>
+        <nav class="top-nav" id="top-nav">
+            <div class="nav-wrapper">
+                <div class="right">
+                    <a class="dropdown-button" data-constrainwidth="false" href="#" data-activates="user-action">
+                        <svg data-src="{% static "dashboard/images/account-circle.svg" %}" width="24" height="24"
+                             fill="#fff"/>
+                    </a>
+                    <ul id="user-action" class="dropdown-content">
+                        <li class="user-name">
+                            {{ request.user }}
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="{% url 'core:home' %}" target="_blank" class="waves-effect">
+                                {% trans "Visit site" context "Dashboard top nav site redirection" %}
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="{% url 'account:logout' %}" class="waves-effect">
+                                {% trans "Log out" context "Log out from account" %}
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <ul class="left">
                     <li>
-                        <a href="{% url 'core:home' %}" target="_blank" class="waves-effect">
-                            {% trans "Visit site" context "Dashboard top nav site redirection" %}
+                        <a href="#" id="toggle-menu">
+                            <svg data-src="{% static "dashboard/images/mobile-menu.svg" %}" width="24" height="24"/>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'dashboard:index' %}" class="logo">
+                            <svg data-src="{% static "dashboard/images/logo.svg" %}" height="38px" width="176px"/>
                         </a>
                     </li>
 
-                    <li>
-                        <a href="{% url 'account:logout' %}" class="waves-effect">
-                            {% trans "Log out" context "Log out from account" %}
+                </ul>
+                <ul class="side-nav">
+                    <li class="nav-home">
+                        <a href="{% url 'dashboard:index' %}">
+                            {% trans "Home" context "Dashboard homepage" %}
                         </a>
                     </li>
+                    {% if perms.site.manage_settings or perms.shipping.manage_shipping or perms.product.manage_products or perms.page.manage_pages %}
+                        <li class="side-nav-section">
+                            <p>
+                                {% trans "Configuration" context "Dashboard configuration" %}
+                            </p>
+                            <ul>
+                                {% if perms.site.manage_settings %}
+                                    <li class="{% block menu_settings_class %}{% endblock %}">
+                                        <a href="{% url 'dashboard:settings-index' %}">
+                                            {% trans "Site settings" context "Dashboard site settings" %}
+                                        </a>
+                                    </li>
+
+                                    {% if perms.menu.manage_menus %}
+                                        <li class="{% block menu_menus_class %}{% endblock %}">
+                                            <a href="{% url 'dashboard:menu-index' %}">
+                                                {% trans "Navigation" context "Dashboard menus list" %}
+                                            </a>
+                                        </li>
+                                    {% endif %}
+
+                                    {% if perms.account.manage_users %}
+                                        <li class="{% block menu_staff_class %}{% endblock %}">
+                                            <a href="{% url 'dashboard:staff-index' %}">
+                                                {% trans "Staff" context "Dashboard staff members list" %}
+                                            </a>
+                                        </li>
+                                    {% endif %}
+
+                                    {% if perms.page.manage_pages %}
+                                        <li class="{% block menu_product_types_class %}{% endblock %}">
+                                            <a href="{% url 'dashboard:product-type-list' %}">
+                                                {% trans "Products type" context "Products type list" %}
+                                            </a>
+                                        </li>
+                                    {% endif %}
+
+
+                                    {% if perms.product.manage_products %}
+                                        <li class="{% block menu_categories_class %}{% endblock %}">
+                                            <a href="{% url 'dashboard:category-list' %}">
+                                                {% trans "Categories" context "Dashboard categories list" %}
+                                            </a>
+                                        </li>
+                                        <li class="{% block menu_pages_class %}{% endblock %}">
+                                            <a href="{% url 'dashboard:page-list' %}">
+                                                {% trans "Page" context "Dashboard page list" %}
+                                            </a>
+                                        </li>
+                                        <li class="{% block menu_attributes_class %}{% endblock %}">
+                                            <a href="{% url 'dashboard:attributes' %}">
+                                                {% trans "Attributes" context "Dashboard attributes list" %}
+                                            </a>
+                                        </li>
+                                    {% endif %}
+
+                                {% endif %}
+                            </ul>
+                        </li>
+
+                        <li class="side-nav-section" id="version-indicator">
+                            <p>
+                                {% trans "Release:" context "Dashboard software version" %}
+                            </p>
+                        </li>
+                    {% endif %}
                 </ul>
             </div>
-            <ul class="left">
-                <li>
-                    <a href="#" id="toggle-menu">
-                        <svg data-src="{% static "dashboard/images/mobile-menu.svg" %}" width="24" height="24"/>
-                    </a>
-                </li>
-                <li>
-                    <a href="{% url 'dashboard:index' %}" class="logo">
-                        <svg data-src="{% static "dashboard/images/logo.svg" %}" height="38px" width="176px"/>
-                    </a>
-                </li>
-
-            </ul>
-            <ul class="side-nav">
-                <li class="nav-home">
-                    <a href="{% url 'dashboard:index' %}">
-                        {% trans "Home" context "Dashboard homepage" %}
-                    </a>
-                </li>
-                {% if perms.site.manage_settings or perms.shipping.manage_shipping or perms.product.manage_products or perms.page.manage_pages %}
-                    <li class="side-nav-section">
-                        <p>
-                            {% trans "Configuration" context "Dashboard configuration" %}
-                        </p>
-                        <ul>
-                            {% if perms.site.manage_settings %}
-                                <li class="{% block menu_settings_class %}{% endblock %}">
-                                    <a href="{% url 'dashboard:settings-index' %}">
-                                        {% trans "Site settings" context "Dashboard site settings" %}
-                                    </a>
-                                </li>
-
-                                {% if perms.menu.manage_menus %}
-                                    <li class="{% block menu_menus_class %}{% endblock %}">
-                                        <a href="{% url 'dashboard:menu-index' %}">
-                                            {% trans "Navigation" context "Dashboard menus list" %}
-                                        </a>
-                                    </li>
-                                {% endif %}
-
-                                {% if perms.account.manage_users %}
-                                    <li class="{% block menu_staff_class %}{% endblock %}">
-                                        <a href="{% url 'dashboard:staff-index' %}">
-                                            {% trans "Staff" context "Dashboard staff members list" %}
-                                        </a>
-                                    </li>
-                                {% endif %}
-
-                            {% endif %}
-                        </ul>
-                    </li>
-
-                    <li class="side-nav-section" id="version-indicator">
-                        <p>
-                            {% trans "Release:" context "Dashboard software version" %}
-                        </p>
-                    </li>
-                {% endif %}
-            </ul>
-        </div>
-    </nav>
-</header>
+        </nav>
+    </header>
 {% endblock %}
 {% block top-nav %}
     <div class="subheader top-nav">

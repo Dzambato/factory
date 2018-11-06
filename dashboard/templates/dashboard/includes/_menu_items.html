@@ -52,10 +52,10 @@
               {% endif %}
             </td>
             <td class="right-align ignore-link">
-              <a href="{% url 'dashboard:menu-index'%}" class="btn-flat waves-effect">
+              <a href="{% url 'dashboard:menu-item-edit' menu_pk=menu.pk item_pk=item.pk %}" class="btn-flat waves-effect">
                 {% trans 'Edit' context 'Menu item edit action' %}
               </a>
-              <a href="#base-modal" class="btn-flat waves-effect modal-trigger-custom" data-href="{% url 'dashboard:menu-index'%}">
+              <a href="#base-modal" class="btn-flat waves-effect modal-trigger-custom" data-href="{% url 'dashboard:menu-item-delete' menu_pk=menu.pk item_pk=item.pk%}">
                 {% trans "Remove" context "Menu item list action link" %}
               </a>
             </td>

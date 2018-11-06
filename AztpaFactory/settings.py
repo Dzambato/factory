@@ -9,9 +9,22 @@ https://docs.djangoproject.com/en/2.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.1/ref/settings/
 """
+import ast
 
 import os
 from django.utils.translation import ugettext_lazy as _, pgettext_lazy
+
+
+def get_bool_from_env(name, default_value):
+    if name in os.environ:
+        value = os.environ[name]
+        try:
+            return ast.literal_eval(value)
+        except ValueError as e:
+            raise ValueError(
+                '{} is an invalid value for {}'.format(value, name)) from e
+    return default_value
+
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -52,12 +65,17 @@ INSTALLED_APPS = [
     'dashboard',
     'page',
     'seo',
+    'product',
 
 
     # Подключаемые приложения
     'mptt',
+    'ckeditor',
+    'ckeditor_uploader',
     'bootstrap4',
+    'django_prices',
     'social_django',
+    'django_filters',
     'versatileimagefield',
 ]
 
@@ -124,6 +142,8 @@ LOGIN_REDIRECT_URL = '/'
 LOGIN_URL = 'account/login/'
 AUTH_USER_MODEL = 'account.User'
 
+DEFAULT_CURRENCY = os.environ.get('DEFAULT_CURRENCY', 'USD')
+
 VERSATILEIMAGEFIELD_SETTINGS = {
     # Images should be pre-generated on Production environment
     'create_images_on_demand': True,
@@ -173,5 +193,20 @@ STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
+ENABLE_SSL = get_bool_from_env('ENABLE_SSL', False)
+
+CKEDITOR_CONFIGS = {
+    'default': {
+        'toolbar': 'Advanced',
+        'width': '100%',
+        'height': '50px'
+    },
+}
+CKEDITOR_UPLOAD_PATH = 'uploads/'
+CKEDITOR_FILENAME_GENERATOR = 'dashboard.ckeditor.utils.get_filename'
+CKEDITOR_IMAGE_BACKEND = "pillow"
+
+IMAGE_QUALITY = 40
+THUMBNAIL_SIZE = (300, 300)
 
 TEMPLATE_DIRS = (os.path.join(BASE_DIR, 'templates'),)

@@ -30,5 +30,18 @@ urlpatterns = [
     url(r'attributes/(?P<attribute_pk>[0-9]+)/value/add/$', views.attribute_value_create, name='attribute-value-add'),
     url(r'attributes/(?P<attribute_pk>[0-9]+)/value/(?P<value_pk>[0-9]+)/update/$', views.attribute_value_edit,name='attribute-value-update'),
     url(r'attributes/(?P<attribute_pk>[0-9]+)/value/(?P<value_pk>[0-9]+)/delete/$',views.attribute_value_delete,name='attribute-value-delete'),
-    url(r'attributes/(?P<attribute_pk>[0-9]+)/values/reorder/$', views.ajax_reorder_attribute_values,name='attribute-values-reorder')
+    url(r'attributes/(?P<attribute_pk>[0-9]+)/values/reorder/$', views.ajax_reorder_attribute_values,name='attribute-values-reorder'),
+
+    url(r'^$', views.product_list, name='product-list'),
+    url(r'^(?P<pk>[0-9]+)/$', views.product_details, name='product-details'),
+    url(r'^(?P<pk>[0-9]+)/publish/$', views.product_toggle_is_published, name='product-publish'),
+    url(r'^add/select-type/$',views.product_select_type, name='product-add-select-type'),
+    url(r'^add/(?P<type_pk>[0-9]+)/$',views.product_create, name='product-add'),
+    url(r'^(?P<pk>[0-9]+)/update/$',views.product_edit, name='product-update'),
+    url(r'^(?P<pk>[0-9]+)/delete/$',views.product_delete, name='product-delete'),
+    url(r'^bulk-update/$',views.product_bulk_update, name='product-bulk-update'),
+    url(r'^ajax/products/$',views.ajax_products_list, name='ajax-products'),
+
+    url(r'^(?P<product_pk>[0-9]+)/images/$', views.product_images, name='product-image-list'),
+    url(r'^(?P<product_pk>[0-9]+)/images/add/$',views.product_image_create, name='product-image-add'),
 ]

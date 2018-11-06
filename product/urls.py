@@ -21,4 +21,5 @@ from . import views
 app_name = 'core'
 urlpatterns = [
     url(r'^category/(?P<slug>[a-z0-9-_]+?)-(?P<category_id>[0-9]+)/$',views.category_index, name='category'),
+    url(r'^details/(?P<slug>[a-z0-9-_]+?)-(?P<product_id>[0-9]+)/$',views.details, name='details'),
 ]

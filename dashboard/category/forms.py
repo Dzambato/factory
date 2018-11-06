@@ -22,8 +22,15 @@ class CategoryForm(forms.ModelForm):
 
 
     def __init__(self, *args, **kwargs):
+        self.parent_pk = kwargs.pop('parent_pk')
         super().__init__(*args, **kwargs)
         self.fields['seo_description'] = SeoDescriptionField(
             extra_attrs={'data-bind': self['description'].auto_id})
         self.fields['seo_title'] = SeoTitleField(
             extra_attrs={'data-bind': self['name'].auto_id})
+
+    def save(self, commit=True):
+        if self.parent_pk:
+            self.instance.parent = get_object_or_404(
+                Category, pk=self.parent_pk)
+        return super().save(commit=commit)

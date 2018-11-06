@@ -129,6 +129,11 @@
 
 
                                     {% if perms.product.manage_products %}
+                                        <li class="{% block menu_products_class %}{% endblock %}">
+                                            <a href="{% url 'dashboard:product-list' %}">
+                                                {% trans "Products" context "Dashboard products list" %}
+                                            </a>
+                                        </li>
                                         <li class="{% block menu_categories_class %}{% endblock %}">
                                             <a href="{% url 'dashboard:category-list' %}">
                                                 {% trans "Categories" context "Dashboard categories list" %}

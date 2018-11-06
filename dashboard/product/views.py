@@ -14,8 +14,8 @@ from django.db.models import Q
 from django.urls import reverse
 
 from page.models import Page
-from .forms import ProductTypeForm, AttributeForm, AttributeValueForm
-from product.models import ProductType, Attribute, AttributeValue
+from .forms import ProductTypeForm, AttributeForm, AttributeValueForm, ProductBulkUpdate, Attribute, AttributeValue, ProductTypeSelectorForm, ProductForm, ProductImageForm
+from product.models import ProductType, Product, ProductImage
 
 
 @staff_member_required
@@ -106,21 +106,6 @@ def attribute_list(request):
     }
     return TemplateResponse(
         request, 'dashboard/product/attribute/list.html', ctx)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -275,3 +260,200 @@ def ajax_reorder_attribute_values(request, attribute_pk):
         request, 'dashboard/product/attribute/list.html', ctx)
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@staff_member_required
+@permission_required('product.manage_products')
+def product_list(request):
+    products = Product.objects.prefetch_related('images')
+    products = products.order_by('name')
+    product_types = ProductType.objects.all()
+    ctx = {
+        'bulk_action_form': ProductBulkUpdate(),
+        'products': products,
+        'product_types': product_types,
+        }
+    return TemplateResponse(request, 'dashboard/product/list.html', ctx)
+
+
+@staff_member_required
+@permission_required('product.manage_products')
+def product_bulk_update(request):
+    products = Product.objects.prefetch_related('images')
+    products = products.order_by('name')
+    product_types = ProductType.objects.all()
+    ctx = {
+        'bulk_action_form': ProductBulkUpdate(),
+        'products': products,
+        'product_types': product_types,
+        }
+    return TemplateResponse(request, 'dashboard/product/list.html', ctx)
+
+
+
+@staff_member_required
+@permission_required('product.manage_products')
+def ajax_products_list(request):
+    products = Product.objects.prefetch_related('images')
+    products = products.order_by('name')
+    product_types = ProductType.objects.all()
+    ctx = {
+        'bulk_action_form': ProductBulkUpdate(),
+        'products': products,
+        'product_types': product_types,
+        }
+    return TemplateResponse(request, 'dashboard/product/list.html', ctx)
+
+
+
+@staff_member_required
+@permission_required('product.manage_products')
+def product_delete(request, pk):
+    products = Product.objects.prefetch_related('images')
+    products = products.order_by('name')
+    product_types = ProductType.objects.all()
+    ctx = {
+        'bulk_action_form': ProductBulkUpdate(),
+        'products': products,
+        'product_types': product_types,
+        }
+    return TemplateResponse(request, 'dashboard/product/list.html', ctx)
+
+
+
+@staff_member_required
+@permission_required('product.manage_products')
+def product_edit(request, pk):
+    products = Product.objects.prefetch_related('images')
+    products = products.order_by('name')
+    product_types = ProductType.objects.all()
+    ctx = {
+        'bulk_action_form': ProductBulkUpdate(),
+        'products': products,
+        'product_types': product_types,
+        }
+    return TemplateResponse(request, 'dashboard/product/list.html', ctx)
+
+
+
+@staff_member_required
+@permission_required('product.manage_products')
+def product_create(request, type_pk):
+    product_type = get_object_or_404(ProductType, pk=type_pk)
+    product = Product(product_type=product_type)
+    product_form = ProductForm(request.POST or None, instance=product)
+
+    if product_form.is_valid():
+        product = product_form.save()
+        msg = pgettext_lazy(
+            'Dashboard message', 'Added product %s') % (product,)
+        messages.success(request, msg)
+        return redirect('dashboard:product-details', pk=product.pk)
+    ctx = {
+        'product_form': product_form,
+        'product': product
+    }
+    return TemplateResponse(request, 'dashboard/product/form.html', ctx)
+
+
+
+@staff_member_required
+@permission_required('product.manage_products')
+def product_select_type(request):
+    form = ProductTypeSelectorForm(request.POST or None)
+    status = 200
+    if form.is_valid():
+        redirect_url = reverse(
+            'dashboard:product-add',
+            kwargs={'type_pk': form.cleaned_data.get('product_type').pk})
+        return (
+            JsonResponse({'redirectUrl': redirect_url})
+            if request.is_ajax() else redirect(redirect_url))
+    elif form.errors:
+        status = 400
+    ctx = {'form': form}
+    template = 'dashboard/product/modal/select_type.html'
+    return TemplateResponse(request, template, ctx, status=status)
+
+
+
+@staff_member_required
+@permission_required('product.manage_products')
+def product_toggle_is_published(request, pk):
+    products = Product.objects.prefetch_related('images')
+    products = products.order_by('name')
+    product_types = ProductType.objects.all()
+    ctx = {
+        'bulk_action_form': ProductBulkUpdate(),
+        'products': products,
+        'product_types': product_types,
+        }
+    return TemplateResponse(request, 'dashboard/product/list.html', ctx)
+
+
+
+
+@staff_member_required
+@permission_required('product.manage_products')
+def product_details(request, pk):
+    products = Product.objects.prefetch_related('images').all()
+    product = get_object_or_404(products, pk=pk)
+    images = product.images.all()
+
+    ctx = {
+        'product': product,
+        'images': images,
+        }
+    return TemplateResponse(request, 'dashboard/product/detail.html', ctx)
+
+
+
+@staff_member_required
+@permission_required('product.manage_products')
+def product_images(request, product_pk):
+    products = Product.objects.prefetch_related('images')
+    product = get_object_or_404(products, pk=product_pk)
+    images = product.images.all()
+    ctx = {
+        'product': product, 'images': images, 'is_empty': not images.exists()}
+    return TemplateResponse(
+        request, 'dashboard/product/product_image/list.html', ctx)
+
+
+@staff_member_required
+@permission_required('product.manage_products')
+def product_image_create(request, product_pk):
+    product = get_object_or_404(Product, pk=product_pk)
+    product_image = ProductImage(product=product)
+    form = ProductImageForm(
+        request.POST or None, request.FILES or None, instance=product_image)
+    if form.is_valid():
+        product_image = form.save()
+        msg = pgettext_lazy(
+            'Dashboard message',
+            'Added image %s') % (product_image.image.name,)
+        messages.success(request, msg)
+        return redirect('dashboard:product-image-list', product_pk=product.pk)
+    ctx = {'form': form, 'product': product, 'product_image': product_image}
+    return TemplateResponse(
+        request,
+        'dashboard/product/product_image/form.html',
+        ctx)

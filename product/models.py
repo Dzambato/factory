@@ -7,6 +7,8 @@ from seo.models import SeoModel
 from autoslug import AutoSlugField
 from django.urls import reverse
 from menu.models import Category
+from versatileimagefield.fields import PPOIField, VersatileImageField
+from django.contrib.postgres.fields import HStoreField
 # Create your models here.
 
 
@@ -33,6 +35,8 @@ class Product(SeoModel):
     available_on = models.DateField(blank=True, null=True)
     is_published = models.BooleanField(default=True)
     updated_at = models.DateTimeField(auto_now=True, null=True)
+    attributes = HStoreField(default=dict, blank=True)
+
 
     class Meta:
         app_label = 'product'
@@ -58,6 +62,10 @@ class Product(SeoModel):
     def is_available(self):
         today = datetime.date.today()
         return self.available_on is None or self.available_on <= today
+
+    def get_first_image(self):
+        images = list(self.images.all())
+        return images[0].image if images else None
 
 
 
@@ -85,7 +93,6 @@ class Attribute(models.Model):
 class AttributeValue(SortableModel):
     slug = AutoSlugField(populate_from='name', unique=True)
     name = models.CharField(max_length=100)
-    value = models.CharField(max_length=100, blank=True, default='')
     attribute = models.ForeignKey(Attribute, related_name='values', on_delete=models.CASCADE)
 
     class Meta:
@@ -97,3 +104,19 @@ class AttributeValue(SortableModel):
 
     def get_ordering_queryset(self):
         return self.attribute.values.all()
+
+
+class ProductImage(SortableModel):
+    product = models.ForeignKey(
+        Product, related_name='images', on_delete=models.CASCADE)
+    image = VersatileImageField(
+        upload_to='products', ppoi_field='ppoi', blank=False)
+    ppoi = PPOIField()
+    alt = models.CharField(max_length=128, blank=True)
+
+    class Meta:
+        ordering = ('sort_order', )
+        app_label = 'product'
+
+    def get_ordering_queryset(self):
+        return self.product.images.all()

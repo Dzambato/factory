@@ -49,6 +49,7 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
 
     # Модули джанго
+    'django.contrib.postgres',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -56,6 +57,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
+
 
 
     # Локальные приложения
@@ -72,6 +74,7 @@ INSTALLED_APPS = [
     'mptt',
     'ckeditor',
     'ckeditor_uploader',
+    'celery',
     'bootstrap4',
     'django_prices',
     'social_django',
@@ -142,6 +145,15 @@ LOGIN_REDIRECT_URL = '/'
 LOGIN_URL = 'account/login/'
 AUTH_USER_MODEL = 'account.User'
 
+PLACEHOLDER_IMAGES = {
+    60: 'images/placeholder60x60.png',
+    120: 'images/placeholder120x120.png',
+    255: 'images/placeholder255x255.png',
+    540: 'images/placeholder540x540.png',
+    1080: 'images/placeholder1080x1080.png'}
+
+DEFAULT_PLACEHOLDER = 'images/placeholder255x255.png'
+
 DEFAULT_CURRENCY = os.environ.get('DEFAULT_CURRENCY', 'USD')
 
 VERSATILEIMAGEFIELD_SETTINGS = {
@@ -149,6 +161,14 @@ VERSATILEIMAGEFIELD_SETTINGS = {
     'create_images_on_demand': True,
 }
 
+VERSATILEIMAGEFIELD_RENDITION_KEY_SETS = {
+    'products': [
+        ('product_gallery', 'thumbnail__540x540'),
+        ('product_gallery_2x', 'thumbnail__1080x1080'),
+        ('product_small', 'thumbnail__60x60'),
+        ('product_small_2x', 'thumbnail__120x120'),
+        ('product_list', 'thumbnail__255x255'),
+        ('product_list_2x', 'thumbnail__510x510')]}
 
 PAGINATE_BY = 16
 DASHBOARD_PAGINATE_BY = 30

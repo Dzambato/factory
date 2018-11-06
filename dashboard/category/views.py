@@ -28,14 +28,12 @@ def category_list(request):
 @permission_required('product.manage_products')
 def category_create(request, root_pk=None):
     path = None
-    root = None
+    category = Category()
     if root_pk:
         root = get_object_or_404(Category, pk=root_pk)
         path = root.get_ancestors(include_self=True) if root else []
-        category = Category(parent_id=root.id)
-    else:
-        category = Category()
-    form = CategoryForm(request.POST or None, request.FILES or None, instance=category)
+    form = CategoryForm(
+        request.POST or None, request.FILES or None, parent_pk=root_pk)
     if form.is_valid():
         category = form.save()
         messages.success(

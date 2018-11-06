@@ -4,6 +4,8 @@ from urllib.parse import urlencode
 from django import forms
 from django.template import Library
 from django.templatetags.static import static
+from versatileimagefield.widgets import VersatileImagePPOIClickWidget
+from ckeditor_uploader.widgets import CKEditorUploadingWidget
 
 register = Library()
 
@@ -44,3 +46,19 @@ def sorting_header(context, field, label, is_wide=False):
         'url': '%s?%s' % (request.path, request_get.urlencode()),
         'is_active': is_active, 'sorting_icon': sorting_icon, 'label': label,
         'is_wide': is_wide}
+
+
+@register.filter
+def is_versatile_image_ppoi_click_widget(field):
+    """Check if image field widget is used when editing a product image."""
+    return isinstance(field.field.widget, VersatileImagePPOIClickWidget)
+
+
+# @register.filter
+# def is_image_preview_widget(field):
+#     """Check if image field widget is used when adding a product image."""
+#     return isinstance(field.field.widget, ImagePreviewWidget)
+
+@register.filter
+def is_ckeditor(field):
+    return isinstance(field.field.widget, CKEditorUploadingWidget)

@@ -1,5 +1,10 @@
 from django import forms, template
 from django.template.loader import get_template
+from django_filters.widgets import RangeWidget
+
+from dashboard.widgets import (
+    CharsLeftWidget, DateRangeWidget, MoneyRangeWidget)
+
 register = template.Library()
 
 
@@ -23,7 +28,6 @@ def add_input_classes(field):
 
 def render(element, markup_classes):
     element_type = element.__class__.__name__.lower()
-
     if element_type == 'boundfield':
         add_input_classes(element)
         template = get_template("materializecssform/field.html")
@@ -78,20 +82,25 @@ def is_select(field):
 
 
 @register.filter
-def is_email(field):
-    return isinstance(field.field.widget, forms.EmailInput)
-
-
-@register.filter
-def is_password(field):
-    return isinstance(field.field.widget, forms.PasswordInput)
-
-
-
-@register.filter
 def is_checkbox_select_multiple(field):
     return isinstance(field.field.widget, forms.CheckboxSelectMultiple)
 
+
+@register.filter
+def is_range(field):
+    return isinstance(field.field.widget, RangeWidget)
+
+
+@register.filter
+def is_date_range(field):
+    return isinstance(field.field.widget, DateRangeWidget)
+
+
+@register.filter
+def is_price_range(field):
+    return isinstance(field.field.widget, MoneyRangeWidget)
+
+
 @register.filter
 def is_chars_left(field):
-    return isinstance(field.field.widget, forms.TextInput)
+    return isinstance(field.field.widget, CharsLeftWidget)

@@ -7,6 +7,7 @@ from mptt.models import MPTTModel
 from versatileimagefield.fields import PPOIField, VersatileImageField
 from seo.models import SeoModel
 from core.models import SortableModel
+from autoslug import AutoSlugField
 
 # Create your models here.
 
@@ -27,7 +28,7 @@ class Menu(models.Model):
 
 class Category(MPTTModel, SeoModel):
     name = models.CharField(max_length=128)
-    slug = models.SlugField(max_length=128)
+    slug = AutoSlugField(populate_from='name', unique=True)
     description = models.TextField(blank=True)
     parent = models.ForeignKey(
         'self', null=True, blank=True, related_name='children',
